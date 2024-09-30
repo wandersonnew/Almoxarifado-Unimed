@@ -1,40 +1,40 @@
+import Layout from '../Layouts/Layout';
 import React, { useState } from 'react';
 import { Button, Modal } from 'antd';
 import Usercreate from './Usercreate';
 
 const User = () => {
-
     const [isModalOpen, setIsModalOpen] = useState(false);
-        const showModal = () => {
+
+    const showModal = () => {
         setIsModalOpen(true);
     };
-    const handleOk = () => {
-        setIsModalOpen(false);
-    };
-    const handleCancel = () => {
+
+    const handleClose = () => {
         setIsModalOpen(false);
     };
 
     return (
         <>
-            <h1>Usuários</h1>
+            <h1 className='text-center'>Usuários</h1>
 
             <Button type="primary" onClick={showModal}>
-                Open Modal
+                Cadastrar
             </Button>
             <Modal
                 title="Cadastro de usuário"
                 open={isModalOpen}
-                onOk={handleOk}
-                onCancel={handleCancel}
-                centered  // Centraliza o modal na tela (propriedade do Ant Design)
+                onCancel={handleClose}
+                centered
+                footer={null}
             >
-            <div className="flex flex-col items-center justify-center h-full">
-                <Usercreate />
-            </div>
+                <div className="flex flex-col items-center justify-center h-full">
+                    <Usercreate />
+                </div>
             </Modal>
         </>
-    )
+    );
 }
 
-export default User
+User.layout = page => <Layout children={page} />
+export default User;

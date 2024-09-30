@@ -1,6 +1,7 @@
-import {React, useState} from 'react';
+import {React, useState, useEffect} from 'react';
 import { Button, Checkbox, Form, Input, message } from 'antd';
 import { router, usePage } from '@inertiajs/react';
+import Swal from 'sweetalert2'
 
 const onFinish = (values) => {
     router.post('/user/newuser', values)
@@ -10,20 +11,22 @@ const onFinishFailed = (errorInfo) => {
 };
 
 export default function Usercreate() {
+    console.log(usePage().props)    
+    const { flash, errors } = usePage().props;
 
-    const { errors } = usePage().props
-    const [messageApi, contextHolder] = message.useMessage();
+    useEffect(() => {
+        if (flash.message) {
+            Swal.fire({
+                title: 'Mensagem!',
+                text: flash.message,
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        }
+    }, [flash.message]);
 
-    const { flash } = usePage().props;
-    const [flashMssg, setFlashMssg] = useState(flash.message)
-    setTimeout(() => {
-        setFlashMssg(null)
-    }, 2000);
     return (
-        <> 
-            
-            { flashMssg && <div>{ flashMssg }</div> }
-
+        <>
             <Form
                 name="basic"
                 labelCol={{
@@ -44,7 +47,7 @@ export default function Usercreate() {
             >
                 
                 <Form.Item
-                label="Name"
+                label="Nome"
                 name="name"
                 rules={[
                     {
@@ -61,7 +64,7 @@ export default function Usercreate() {
                     </div>}
                 
                 <Form.Item
-                label="Username"
+                label="Usuário"
                 name="username"
                 rules={[
                     {
@@ -93,7 +96,7 @@ export default function Usercreate() {
                     </div>}
 
                 <Form.Item
-                label="Password"
+                label="Senha"
                 name="password"
                 rules={[
                     {
