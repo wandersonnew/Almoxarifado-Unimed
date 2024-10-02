@@ -38,8 +38,8 @@ const Login = ({children}) => {
                 autoComplete="off"
             >
                 <Form.Item
-                label="Username"
-                name="username"
+                label="Email"
+                name="email"
                 rules={[
                     {
                     required: true,
