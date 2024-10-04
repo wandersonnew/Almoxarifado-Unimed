@@ -23,7 +23,6 @@ class UserStoreRequest extends FormRequest
     {
         return [
             'name' => 'required|max:255|min:3',
-            'username' => 'required|unique:users,username|max:255|min:3',
             'email' => 'required|unique:users,email|max:255',
             'password' => 'required|min:8',
         ];
@@ -35,11 +34,6 @@ class UserStoreRequest extends FormRequest
             'name.required' => 'O campo nome é obrigatório.',
             'name.max' => 'O campo nome não pode ter mais que 255 caracteres.',
             'name.min' => 'O campo nome não pode ter menos que 3 caracteres.',
-            
-            'username.required' => 'O campo nome de usuário é obrigatório.',
-            'username.unique' => 'Este nome de usuário já está em uso.',
-            'username.max' => 'O nome de usuário não pode ter mais que 255 caracteres.',
-            'username.min' => 'O nome de usuário não pode ter menos que 3 caracteres.',
             
             'email.required' => 'O campo e-mail é obrigatório.',
             'email.unique' => 'Este e-mail já está em uso.',

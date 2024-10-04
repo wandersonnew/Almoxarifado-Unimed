@@ -1,18 +1,16 @@
 import {React, useState} from 'react';
 import { Button, Checkbox, Form, Input } from 'antd';
 import { Head, router, usePage } from '@inertiajs/react';
-import { Inertia } from '@inertiajs/inertia';
 
-const onFinish = (values) => {
-    console.log('Success:', values);
-    // Inertia.post('/auth', values);
-    router.post('/auth', values)
-};
-const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-};  
 
 const Login = ({children}) => {
+    const onFinish = (values) => {
+        console.log('Success:', values);
+        router.post('/auth', values);
+    };
+    const onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
+    };  
     return (
         <main>
 
@@ -63,7 +61,7 @@ const Login = ({children}) => {
                 <Input.Password />
                 </Form.Item>
 
-                <Form.Item
+                {/* <Form.Item
                 name="remember"
                 valuePropName="checked"
                 wrapperCol={{
@@ -72,7 +70,7 @@ const Login = ({children}) => {
                 }}
                 >
                 <Checkbox>Remember me</Checkbox>
-                </Form.Item>
+                </Form.Item> */}
 
                 <Form.Item
                 wrapperCol={{

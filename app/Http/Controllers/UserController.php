@@ -24,17 +24,21 @@ class UserController extends Controller
 
         $check = User::create([
             'name'=> $request->name,
-            'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password, ['rounds' => 12]),
         ]);
-
-        if ($check) return back()->with("message", "Usuário criado com sucesso!");
+        
+        if ($check) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Usuário criado com sucesso!',
+            ], 201);
+        }
     
-        return back()->withErrors([
+        return response()->json([
+            'status' => 'error',
             'message' => 'Erro ao cadastrar usuário.',
-        ]);
-    
+        ], 400);
 
     }
 }

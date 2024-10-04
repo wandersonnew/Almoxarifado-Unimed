@@ -3,16 +3,30 @@ import { Button, Checkbox, Form, Input, message } from 'antd';
 import { router, usePage } from '@inertiajs/react';
 import Swal from 'sweetalert2'
 
-const onFinish = (values) => {
-    router.post('/user/newuser', values)
-};
-const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-};
+// const onFinish = (values) => {
+//     router.post('/user/newuser', values)
+// };
+// const onFinishFailed = (errorInfo) => {
+//     console.log('Failed:', errorInfo);
+// };
 
-export default function Usercreate() {
-    console.log(usePage().props)    
+export default function Usercreate({buttonName, sendrouter, user}) {
     const { flash, errors } = usePage().props;
+
+    console.log(flash)
+
+    const onFinish = (values) => {
+        router.post(sendrouter, values)
+        .then(response => {
+
+        })
+        .catch(error => {
+            
+        });
+    };
+    const onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
+    };
 
     useEffect(() => {
         if (flash.message) {
@@ -28,7 +42,7 @@ export default function Usercreate() {
     return (
         <>
             <Form
-                name="basic"
+                // name="basic"
                 labelCol={{
                 span: 8,
                 }}
@@ -49,6 +63,7 @@ export default function Usercreate() {
                 <Form.Item
                 label="Nome"
                 name="name"
+                initialValue={user?.name ?? ""}
                 rules={[
                     {
                     required: true,
@@ -62,26 +77,11 @@ export default function Usercreate() {
                 {errors.name && <div className='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative'>
                     {errors.name}
                     </div>}
-                
-                <Form.Item
-                label="Usuário"
-                name="username"
-                rules={[
-                    {
-                    required: true,
-                    message: 'Por favor insira seu usuário!',
-                    },
-                ]}
-                >
-                <Input />
-                </Form.Item>
-                {errors.username && <div className='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative'>
-                    {errors.username}
-                    </div>}
 
                 <Form.Item
                 label="Email"
                 name="email"
+                initialValue={user?.email ?? ""}
                 rules={[
                     {
                     required: true,
@@ -111,17 +111,6 @@ export default function Usercreate() {
                     {errors.password}
                     </div>}
 
-                {/* <Form.Item
-                name="remember"
-                valuePropName="checked"
-                wrapperCol={{
-                    offset: 8,
-                    span: 16,
-                }}
-                >
-                <Checkbox>Remember me</Checkbox>
-                </Form.Item> */}
-
                 <Form.Item
                 wrapperCol={{
                     offset: 8,
@@ -129,7 +118,7 @@ export default function Usercreate() {
                 }}
                 >
                 <Button type="primary" htmlType="submit">
-                    Cadastrar
+                    {buttonName}
                 </Button>
                 </Form.Item>
             </Form>

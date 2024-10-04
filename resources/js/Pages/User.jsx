@@ -1,18 +1,10 @@
 import Layout from '../Layouts/Layout';
 import React, { useState } from 'react';
-import { Button, Modal, Table } from 'antd';
+import { Table } from 'antd';
 import Usercreate from './Usercreate';
+import ModalComp from '../components/ModalComp';
 
 const User = ({ users }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const showModal = () => {
-        setIsModalOpen(true);
-    };
-
-    const handleClose = () => {
-        setIsModalOpen(false);
-    };
     
     const hasUsers = users && users.length > 0;
     const dataSource = hasUsers ? users.map(user => ({
@@ -20,7 +12,18 @@ const User = ({ users }) => {
         id: user.id.toString(),
         name: user.name,
         email: user.email,
-        action: <Button>Delete</Button>,
+        action: <ModalComp 
+                    title={'Editar dados de usuário'}
+                    tittleButton={'Editar'}
+                    content={<Usercreate
+                                buttonName={["Editar"]}
+                                user={{
+                                    'id': user.id,
+                                    'name': user.name,
+                                    'email': user.email,
+                                }}
+                            />} 
+                />,
     })) : [];
 
     const columns = hasUsers ? [
@@ -50,20 +53,14 @@ const User = ({ users }) => {
         <>
             <h1 className='text-center'>Usuários</h1>
 
-            <Button type="primary" onClick={showModal}>
-                Cadastrar
-            </Button>
-            <Modal
-                title="Cadastro de usuário"
-                open={isModalOpen}
-                onCancel={handleClose}
-                centered
-                footer={null}
-            >
-                <div className="flex flex-col items-center justify-center h-full">
-                    <Usercreate />
-                </div>
-            </Modal>
+            <ModalComp 
+                title={'Cadastrar dados de usuário'}
+                tittleButton={'Cadastrar'}
+                content={<Usercreate
+                            buttonName={"Cadastrar"}
+                            sendrouter={"/user/newuser"}
+                        />} 
+            />
 
             {hasUsers ? (
                 <Table dataSource={dataSource} columns={columns} />
