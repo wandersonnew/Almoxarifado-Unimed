@@ -12,6 +12,10 @@ const ModalComp = ({title, tittleButton, content}) => {
         setIsModalOpen(false);
     };
 
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
+
     return (
         <>
             <Button type="primary" onClick={showModal}>
@@ -23,6 +27,7 @@ const ModalComp = ({title, tittleButton, content}) => {
                 onCancel={handleClose}
                 centered
                 footer={null}
+                onOk={handleOk}
             >
                 <div className="flex flex-col items-center justify-center h-full">
                     {content}

@@ -41,4 +41,32 @@ class UserController extends Controller
         ], 400);
 
     }
+
+    public function delete(int $id)
+    {
+        $user = User::find($id);
+
+        if (!$user) return response()->json(['message' => 'Usuário não encontrado'], 404);
+
+        $user->delete();
+
+        return response()->json(['message' => 'Usuário deletado com sucesso'], 200);
+    }
+
+    public function update(Request $request)
+    {
+        // $validated = $request->validated();
+        $updateData = [];
+        
+        if($request->name) $updateData['name'] = $request->name;
+        if($request->email) $updateData['email'] = $request->email;
+        if($request->password) $updateData['password'] = Hash::make($request->password, ['round'=> 12]);
+
+        $user = User::where("id", $request->id)
+            ->update($updateData);
+
+        if (!$user) return response()->json(['message' => 'Erro ao atualizar!'], 404);
+    
+        return response()->json(['message' => 'Dados atualizado com sucesso!'], 200);
+    }
 }

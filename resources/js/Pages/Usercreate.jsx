@@ -1,7 +1,7 @@
 import {React, useState, useEffect} from 'react';
 import { Button, Checkbox, Form, Input, message } from 'antd';
 import { router, usePage } from '@inertiajs/react';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 
 // const onFinish = (values) => {
 //     router.post('/user/newuser', values)
@@ -10,19 +10,13 @@ import Swal from 'sweetalert2'
 //     console.log('Failed:', errorInfo);
 // };
 
-export default function Usercreate({buttonName, sendrouter, user}) {
+export default function Usercreate({buttonName, sendrouter, user, passRequired}) {
     const { flash, errors } = usePage().props;
 
     console.log(flash)
 
     const onFinish = (values) => {
-        router.post(sendrouter, values)
-        .then(response => {
-
-        })
-        .catch(error => {
-            
-        });
+        router.post(sendrouter, values);
     };
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
@@ -59,6 +53,13 @@ export default function Usercreate({buttonName, sendrouter, user}) {
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
             >
+                <Form.Item
+                    style={{ display: 'none' }}
+                    name="id"
+                    initialValue={user?.id ?? ""}
+                >
+                    <Input />
+                </Form.Item>
                 
                 <Form.Item
                 label="Nome"
@@ -100,7 +101,7 @@ export default function Usercreate({buttonName, sendrouter, user}) {
                 name="password"
                 rules={[
                     {
-                    required: true,
+                    required: passRequired,
                     message: 'Por favor insira sua senha!',
                     },
                 ]}
