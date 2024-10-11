@@ -4,9 +4,14 @@ import { Head, router, usePage } from '@inertiajs/react';
 
 
 const Login = ({children}) => {
+    const page = usePage()
     const onFinish = (values) => {
         console.log('Success:', values);
-        router.post('/auth', values);
+        router.post('/auth', {
+            _token: page.props.csrf_token,
+            email: values.email,
+            password: values.password,
+        });
     };
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);

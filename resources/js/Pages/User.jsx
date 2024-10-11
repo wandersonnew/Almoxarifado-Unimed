@@ -1,14 +1,15 @@
 import Layout from '../Layouts/Layout';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, Table } from 'antd';
-import Usercreate from './Usercreate';
-import ModalComp from '../components/ModalComp';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { router, usePage } from '@inertiajs/react';
 import Swal from 'sweetalert2'
 
+import Usercreateoredit from '../components/Usercreateoredit';
+
 const User = ({ users }) => {
+    var [usersList, setUsersList] = useState(users);
 
     var deleteData = (id) => {
         Swal.fire({
@@ -24,6 +25,7 @@ const User = ({ users }) => {
             if (result.isConfirmed) {
                 axios.get("/users/delete/"+id)
                 .then(response => {
+                    setUsersList(users.filter(user => user.id != id));
                     Swal.fire({
                         title: "Deletado!",
                         text: "Registro deletado.",
@@ -41,27 +43,13 @@ const User = ({ users }) => {
         });
     }
     
-    const hasUsers = users && users.length > 0;
-    const dataSource = hasUsers ? users.map(user => ({
+    const hasUsers = usersList && usersList.length > 0;
+    const dataSource = hasUsers ? usersList.map(user => ({
         key: user.id,
         id: user.id.toString(),
         name: user.name,
         email: user.email,
         action: ( <>
-                <ModalComp 
-                    title={'Editar dados de usuário'}
-                    tittleButton={<EditOutlined />}
-                    content={<Usercreate
-                                buttonName={["Editar"]}
-                                user={{
-                                    'id': user.id,
-                                    'name': user.name,
-                                    'email': user.email,
-                                }}
-                                sendrouter={"/users/update"}
-                                passRequired={false}
-                            />} 
-                />
                 <Button
                     type="primary"
                     danger
@@ -69,8 +57,27 @@ const User = ({ users }) => {
                 >
                     {<DeleteOutlined />}
                 </Button>
+
+                <Usercreateoredit 
+                    buttonName={<EditOutlined />}
+                    title={"Edição de usuário"}
+                    sendrouter={"/users/"+user.id}
+                    user={{
+                        'id': user.id,
+                        'name': user.name,
+                        'email': user.email,
+                    }}
+                    passRequired={false}
+                    buttonForm={'Editar'}
+                />
+
                 </>),
     })) : [];
+
+    // atualiza os dados na tabela
+    useEffect(() => {
+        setUsersList(users);
+    }, [users]);
 
     const columns = hasUsers ? [
         {
@@ -93,19 +100,17 @@ const User = ({ users }) => {
             dataIndex: 'action',
             key: 'action',
         }
-    ] : [];
+    ] : [];    
 
     return (
         <>
             <h1 className='text-center'>Usuários</h1>
 
-            <ModalComp 
-                title={'Cadastrar dados de usuário'}
-                tittleButton={'Cadastrar'}
-                content={<Usercreate
-                            buttonName={"Cadastrar"}
-                            sendrouter={"/user/newuser"}
-                        />} 
+            <Usercreateoredit 
+                buttonName={"Cadastrar"}
+                title={"Cadastro de usuário"}
+                sendrouter={"/user/newuser"}
+                buttonForm={"Cadastrar"}
             />
 
             {hasUsers ? (

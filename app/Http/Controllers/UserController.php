@@ -29,16 +29,17 @@ class UserController extends Controller
         ]);
         
         if ($check) {
-            return response()->json([
+            return to_route('users.index')->with([
                 'status' => 'success',
                 'message' => 'Usuário criado com sucesso!',
-            ], 201);
+            ]);
         }
-    
-        return response()->json([
+        
+        return to_route('users.index')->with([
             'status' => 'error',
             'message' => 'Erro ao cadastrar usuário.',
-        ], 400);
+        ]);
+        
 
     }
 
@@ -53,7 +54,7 @@ class UserController extends Controller
         return response()->json(['message' => 'Usuário deletado com sucesso'], 200);
     }
 
-    public function update(Request $request)
+    public function update(Request $request, int $id)
     {
         // $validated = $request->validated();
         $updateData = [];
@@ -62,11 +63,13 @@ class UserController extends Controller
         if($request->email) $updateData['email'] = $request->email;
         if($request->password) $updateData['password'] = Hash::make($request->password, ['round'=> 12]);
 
-        $user = User::where("id", $request->id)
+        $user = User::where("id", $id)
             ->update($updateData);
 
-        if (!$user) return response()->json(['message' => 'Erro ao atualizar!'], 404);
+        if (!$user) return redirect()->back()->with(['message' => 'Erro ao atualizar!'], 404);
+        // return response()->json(['message' => 'Erro ao atualizar!'], 404);
     
-        return response()->json(['message' => 'Dados atualizado com sucesso!'], 200);
+        // return response()->json(['message' => 'Dados atualizado com sucesso!'], 200);
+        return redirect()->back()->with(['message' => 'Dados atualizado com sucesso!'], 200);
     }
 }
