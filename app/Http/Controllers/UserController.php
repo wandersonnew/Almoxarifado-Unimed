@@ -66,10 +66,14 @@ class UserController extends Controller
         $user = User::where("id", $id)
             ->update($updateData);
 
-        if (!$user) return redirect()->back()->with(['message' => 'Erro ao atualizar!'], 404);
-        // return response()->json(['message' => 'Erro ao atualizar!'], 404);
+        if (!$user) return to_route('users.index')->with([
+            'status' => 'error',
+            'message' => 'Erro ao atualizar dados!',
+        ]);
     
-        // return response()->json(['message' => 'Dados atualizado com sucesso!'], 200);
-        return redirect()->back()->with(['message' => 'Dados atualizado com sucesso!'], 200);
+        return to_route('users.index')->with([
+            'status' => 'success',
+            'message' => 'Dados atualizados com sucesso!',
+        ]);
     }
 }
